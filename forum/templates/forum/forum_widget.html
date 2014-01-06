@@ -1,0 +1,25 @@
+<div>
+    {% if forum  %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a href="{{ forum.get_absolute_url }}">
+                    <h3 class="panel-title">{{ forum.name }}</h3>
+                </a>
+            </div>
+            <div class="panel-body">
+            {% for sub_forum in forum.get_sub_forums%}
+                <div class="well well-sm">
+                    <a href="{{ forum.get_absolute_url }}">
+                        <h3 class="panel-title">{{ sub_forum.name }}</h3>
+                    </a>
+                </div>
+            {% endfor %}
+            {% for thread in forum.get_threads %}
+                {% include "forum/thread_widget.html" with thread=thread user=thread.op %}
+            {% endfor %}
+            </div>
+
+
+        </div>
+    {% endif %}
+</div>

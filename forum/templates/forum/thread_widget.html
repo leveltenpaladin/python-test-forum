@@ -1,0 +1,17 @@
+<div class="panel panel-default">
+    <div class="row">
+      <div class="col-sm-2 col-md-2">
+        {{ thread.pretty_date }}
+      </div>
+      <div class="col-sm-8 col-md-8">
+          <a href="{{ thread.get_absolute_url }}">
+            {{ thread.title }}
+          </a>
+      </div>
+      <div class="col-sm-2 col-md-2">
+        {{ user.username }}
+      </div>
+    </div>
+</div>
+
+
