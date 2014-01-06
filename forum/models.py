@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 from django.contrib.auth.models import User
 
 
@@ -11,10 +10,10 @@ class ForumUser(models.Model):
 
 
 class Forum(models.Model):
-    parent = models.ForeignKey('Forum', blank=True, null=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey('Forum', blank=True, null=True, on_delete=models.SET_NULL, related_name='child_forums')
     name = models.CharField(max_length=255)
-    created_date = models.DateTimeField(default=datetime.now, blank=True)
-    creator = models.ForeignKey(User)
+    created_date = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(User, related_name='created_forums')
     status = models.IntegerField(default=0, null=False, blank=False)
 
     def get_number_threads(self):
@@ -22,10 +21,10 @@ class Forum(models.Model):
         return threads.count()
 
     def get_threads(self):
-        return Thread.objects.filter(parent_forum=self)
+        return self.threads.all()
 
     def get_sub_forums(self):
-        return Forum.objects.filter(parent=self)
+        return self.child_forums.all()
 
     def __unicode__(self):
         return self.name
@@ -33,10 +32,14 @@ class Forum(models.Model):
     def get_absolute_url(self):
         return "/forum/%i/" % self.id
 
+    @staticmethod
+    def get_root_forums():
+        return Forum.objects.filter(parent=None)
+
 
 class Thread(models.Model):
-    parent_forum = models.ForeignKey('Forum')
-    created_date = models.DateTimeField(default=datetime.now, blank=True)
+    parent_forum = models.ForeignKey('Forum', related_name='threads')
+    created_date = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=255)
     op = models.ForeignKey(User)
     status = models.IntegerField(default=0, null=False, blank=False)
@@ -52,8 +55,8 @@ class Thread(models.Model):
 
 
 class Reply(models.Model):
-    parent = models.ForeignKey('Thread')
-    created_date = models.DateTimeField(default=datetime.now, blank=True)
+    parent = models.ForeignKey('Thread', related_name='replies')
+    created_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User)
     content = models.TextField()
     status = models.IntegerField(default=0, null=False, blank=False)
