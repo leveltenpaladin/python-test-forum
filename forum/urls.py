@@ -3,12 +3,12 @@ from django.conf.urls import patterns, url
 from forum import views
 
 urlpatterns = patterns('',
-    url(r'^$', views.landing, name='index'),
-    url(r'^(\d+)/$', views.forum_detail),
-    url(r'^(\d+)/(\d+)/$', views.thread_detail),
-    url(r'^login/$', views.user_login),
-    url(r'^logout/$', views.user_logout),
-    url(r'^signup/$', views.signup),
+    url(r'^$', views.LandingView.as_view()),
+    url(r'^(?P<pk>\d+)/$', views.ForumDetailView.as_view()),
+    url(r'^\d+/(?P<pk>\d+)/$', views.ThreadDetailView.as_view()),
+    url(r'^login/$', views.LogInView.as_view()),
+    url(r'^logout/$', views.LogOutView.as_view()),
+    url(r'^signup/$', views.SignUpView.as_view()),
 
 
 )
