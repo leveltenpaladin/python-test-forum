@@ -1,13 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
-
-
-class ForumUser(models.Model):
-    user = models.OneToOneField(User)
-
-    def __unicode__(self):
-        return self.user.username
 
 
 class Forum(models.Model):

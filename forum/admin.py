@@ -1,11 +1,13 @@
 from django.contrib import admin
-from forum.models import ForumUser, Thread, Forum, Reply
+from django.contrib.auth.admin import User, UserAdmin
 
-# Register your models here.
+from forum.models import Thread, Forum, Reply
+from forum.forms import ForumUserChangeForm, ForumUserCreationForm
 
 
-class ForumUserAdmin(admin.ModelAdmin):
-    pass
+class ForumUserAdmin(UserAdmin):
+    form = ForumUserChangeForm
+    add_form = ForumUserCreationForm
 
 
 class ForumAdmin (admin.ModelAdmin):
@@ -20,7 +22,6 @@ class ReplyAdmin (admin.ModelAdmin):
     list_display = ('parent', 'user', 'content')
 
 
-admin.site.register(ForumUser, ForumUserAdmin)
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(Forum, ForumAdmin)
 admin.site.register(Reply, ReplyAdmin)

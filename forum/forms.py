@@ -1,11 +1,28 @@
-from django.db import models
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import ModelForm
-from django.contrib.auth.models import User
 
-from forum import models
+from models import Forum
 
 
-class UserSignupForm(ModelForm):
+class ForumCreationForm(ModelForm):
     class Meta:
-        model = User
-        fields = {'username', 'password'}
+        model = Forum
+        fields = ['parent', 'name']
+
+    def save(self, commit=True):
+        forum = super(ForumCreationForm, self).save(commit=False)
+        forum.creator = self.user
+        if commit:
+            forum.save()
+        return forum
+
+
+
+class ForumUserCreationForm(UserCreationForm):
+    pass
+
+
+class ForumUserChangeForm(UserChangeForm):
+    pass
+
+
