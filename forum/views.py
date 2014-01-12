@@ -2,11 +2,16 @@ from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import DetailView, View, TemplateView
 from django.views.generic.edit import FormView
 
 from forum.models import Forum, Thread
-from forum.forms import ForumCreationForm
+from forum.forms import ForumCreationForm, ThreadCreationForm
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def landing_redirect(request):
@@ -22,15 +27,52 @@ class LandingView(TemplateView):
         return context
 
 
-class ForumCreationView(FormView):
+class ThreadCreationView(CreateView):
+    template_name = 'forum/create_thread.html'
+    form_class = ThreadCreationForm
+    success_url = '/forum/'
+
+    def form_valid(self, form):
+        form.instance.op = self.request.user
+        return super(ThreadCreationView, self).form_valid(form)
+
+    def get_initial(self):
+        parent = get_object_or_404(Forum, id=self.kwargs['pk'])
+        return {
+            'parent_forum': parent,
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super(ThreadCreationView, self).get_context_data(**kwargs)
+        parent_id = self.kwargs['pk']
+        if parent_id is None:
+            parent_id = 0
+        context['parent_forum_id'] = parent_id
+        return context
+
+
+class ForumCreationView(CreateView):
     template_name = 'forum/create_forum.html'
     form_class = ForumCreationForm
     success_url = '/forum/'
 
     def form_valid(self, form):
-        form.user = self.request.user
-        form.save()
+        form.instance.creator = self.request.user
         return super(ForumCreationView, self).form_valid(form)
+
+    def get_initial(self):
+        parent = get_object_or_404(Forum, id=self.kwargs['pk'])
+        return {
+            'parent': parent,
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super(ForumCreationView, self).get_context_data(**kwargs)
+        parent_id = self.kwargs['pk']
+        if parent_id is None:
+            parent_id = 0
+        context['parent_id'] = parent_id
+        return context
 
 
 class SignUpView(FormView):

@@ -64,6 +64,16 @@
       </div>
     </div>
     <div class="container">
+    {% if errors %}
+        <div class="alert alert-warning">
+          {% for error in errors %}
+          {{ error }}
+          {% endfor %}
+        </div>
+    {% endif %}
+    {% block errors %}
+
+    {% endblock %}
     {% block content %}
 
     {% if forums %}

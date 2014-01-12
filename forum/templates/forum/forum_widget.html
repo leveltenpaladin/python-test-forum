@@ -1,17 +1,37 @@
 <div>
     {% if forum  %}
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <a href="{{ forum.get_absolute_url }}">
-                    <h3 class="panel-title">{{ forum.name }}</h3>
-                </a>
+            <div class="panel-heading" style="overflow: auto;">
+                <div class="col-md-11">
+                    <a href="{{ forum.get_absolute_url }}">
+                        <h3 class="panel-title">{{ forum.name }}</h3>
+                    </a>
+                </div>
+                <div class="col-md-1">
+                    <a href="{% url 'new_forum' forum.id%}">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                    <a href="{% url 'new_thread' forum.id%}">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                </div>
             </div>
             <div class="panel-body">
             {% for sub_forum in forum.get_sub_forums%}
-                <div class="well well-sm">
-                    <a href="{{ forum.get_absolute_url }}">
-                        <h3 class="panel-title">{{ sub_forum.name }}</h3>
-                    </a>
+                <div class="well well-sm" style="overflow: auto;">
+                    <div class="col-md-11">
+                        <a href="{{ sub_forum.get_absolute_url }}">
+                            <h3 class="panel-title">{{ sub_forum.name }}</h3>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="{% url 'new_forum' sub_forum.id%}">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </a>
+                        <a href="{% url 'new_thread' sub_forum.id%}">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                    </div>
                 </div>
             {% endfor %}
             {% for thread in forum.get_threads %}

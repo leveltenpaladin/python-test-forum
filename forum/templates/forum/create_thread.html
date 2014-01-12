@@ -8,12 +8,10 @@
     {% endif %}
 {% endblock %}
 
-
-
 {% block content %}
-    <h1>Create New Forum</h1>
+    <h1>Create New Reply</h1>
 
-<form class="form-horizontal" role="form" action="{% url 'new_forum' parent_id %}" method="post">
+<form class="form-horizontal" role="form" action="{% url 'new_thread' parent_forum_id %}" method="post">
     {% csrf_token %}
     {# Include the hidden fields #}
     {% for hidden in form.hidden_fields %}
@@ -29,7 +27,6 @@
             {% for error in field.errors %}
                 <span>{{ error }}</span>
             {% endfor %}
-
         </div>
     </div>
 

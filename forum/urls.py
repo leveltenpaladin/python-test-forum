@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     url(r'^\d+/(?P<pk>\d+)/$', views.ThreadDetailView.as_view()),
     url(r'^login/$', views.LogInView.as_view()),
     url(r'^logout/$', views.LogOutView.as_view()),
-    url(r'^signup/$', views.SignUpView.as_view()),
-    url(r'^new-forum/$', views.ForumCreationView.as_view(), name='new_forum')
-
+    url(r'^signup/$', views.SignUpView.as_view(), name='signup'),
+    url(r'^(?P<pk>\d+)/new-forum/$', views.ForumCreationView.as_view(), name='new_forum'),
+    url(r'^(?P<pk>\d+)/new-topic/$', views.ThreadCreationView.as_view(), name='new_thread'),
 )
