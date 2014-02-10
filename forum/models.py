@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 
 class Forum(models.Model):
@@ -23,7 +24,7 @@ class Forum(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return "/forum/%i/" % self.id
+        return reverse('forum_detail', args=[self.id])
 
     @staticmethod
     def get_root_forums():
@@ -44,7 +45,7 @@ class Thread(models.Model):
         return self.created_date.strftime('%Y-%m-%d')
 
     def get_absolute_url(self):
-        return "/forum/%i/%i" % (self.parent_forum.id, self.id)
+        return reverse('thread_detail', args=[self.parent_forum.id, self.id])
 
 
 class Reply(models.Model):

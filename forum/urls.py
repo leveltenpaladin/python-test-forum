@@ -4,8 +4,8 @@ from forum import views
 
 urlpatterns = patterns('',
     url(r'^$', views.LandingView.as_view()),
-    url(r'^(?P<pk>\d+)/$', views.ForumDetailView.as_view()),
-    url(r'^\d+/(?P<pk>\d+)/$', views.ThreadDetailView.as_view()),
+    url(r'^(?P<pk>\d+)/$', views.ForumDetailView.as_view(), name='forum_detail'),
+    url(r'^(?P<parent>\d+)/(?P<pk>\d+)/$', views.ThreadDetailView.as_view(), name='thread_detail'),
     url(r'^login/$', views.LogInView.as_view()),
     url(r'^logout/$', views.LogOutView.as_view()),
     url(r'^signup/$', views.SignUpView.as_view(), name='signup'),

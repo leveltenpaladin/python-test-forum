@@ -24,7 +24,6 @@ class ThreadCreationForm(ModelForm):
         }
 
 
-
 class ForumUserCreationForm(UserCreationForm):
     pass
 
