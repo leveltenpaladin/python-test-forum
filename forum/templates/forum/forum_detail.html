@@ -1,5 +1,7 @@
 {% extends "forum/index.html" %}
 
 {% block content %}
-{{ forum.name }}
+    <div class="row">
+        {% include "forum/forum_widget.html" with forum=forum %}
+    </div>
 {% endblock %}

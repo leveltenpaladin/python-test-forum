@@ -47,6 +47,9 @@ class Thread(models.Model):
     def get_absolute_url(self):
         return reverse('thread_detail', args=[self.parent_forum.id, self.id])
 
+    def get_replies(self):
+        return self.replies.all()
+
 
 class Reply(models.Model):
     parent = models.ForeignKey('Thread', related_name='replies')
@@ -55,7 +58,8 @@ class Reply(models.Model):
     content = models.TextField()
     status = models.IntegerField(default=0, null=False, blank=False)
 
+    def pretty_date(self):
+        return self.created_date.strftime('%Y-%m-%d')
+
     def __unicode__(self):
         return self.user.username
-
-# Create your models here.

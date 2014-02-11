@@ -1,5 +1,52 @@
 {% extends "forum/index.html" %}
 
 {% block content %}
-{{ thread.title }}
+<div class="panel panel-default">
+    <div class="panel-heading" style="overflow: auto;">
+        <div class="col-sm-2 col-md-2 thread-detail-user">
+            {{ thread.op.username }}
+            <br>
+            {{ thread.pretty_date }}
+        </div>
+        <div class="col-sm-9 col-md-9 thread-detail-title">
+            <a href="{{ thread.get_absolute_url }}">
+                {{ thread.title }}
+            </a>
+        </div>
+        <div class="col-sm-1 col-md-1">
+            <a href="{% url 'new_thread' thread.id%}">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            <a href="{% url 'new_thread' thread.id%}">
+                <span class="glyphicon glyphicon-share-alt"></span>
+            </a>
+        </div>
+    </div>
+    <div class="row thread-detail-reply">
+        {% for reply in replies %}
+        <div class="col-sm-2 col-md-2">
+            <div class="thread-detail-reply-user">
+                {{ reply.user.username }}
+                <br>
+                {{ reply.pretty_date }}
+            </div>
+        </div>
+        <div class="col-sm-9 col-md-9">
+            <div class="thread-detail-reply-content">
+                {{ reply.content }}
+            </div>
+        </div>
+        <div class="col-sm-1 col-md-1">
+            <div class="thread-detail-reply-actions">
+                <a href="{% url 'new_thread' thread.id%}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+                <a href="{% url 'new_thread' thread.id%}">
+                    <span class="glyphicon glyphicon-retweet"></span>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

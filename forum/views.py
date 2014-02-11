@@ -111,6 +111,12 @@ class ThreadDetailView(DetailView):
     model = Thread
     context_object_name = 'thread'
 
+    def get_context_data(self, **kwargs):
+        context = super(ThreadDetailView, self).get_context_data(**kwargs)
+        context['parent'] = self.object.parent_forum
+        context['replies'] = self.object.get_replies
+        return context
+
 
 class ForumDetailView(DetailView):
     model = Forum
