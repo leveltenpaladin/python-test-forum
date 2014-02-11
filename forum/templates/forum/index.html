@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Django Forum</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
@@ -10,66 +10,69 @@
     <link href="{% static "forum/css/landing.css" %}" rel="stylesheet">
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="{% static "forum/js/bootstrap.min.js" %}"></script>
-  </head>
-  <body>
-  <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="container">
+</head>
+<body>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/forum/">Forum</a>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'landing' %}">Forum</a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="/forum/">Home</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-              </ul>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-          {% if user.is_authenticated %}
-            <li class="dropdown active">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="/forum/logout/">Log Out</a></li>
-              </ul>
-            </li>
-          {% else %}
-            <li class="active">
-                <form method="post" class="navbar-form navbar-left" action="/forum/login/">{% csrf_token %}
-                      <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Username" name="username">
-                      </div>
-                      <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password" name="password">
-                      </div>
-                    <button class="btn btn-default" type="submit">Login</button>
-                </form>
-            </li>
-            <li class="active">
-            <a href="/forum/signup/">
-                Sign Up
-            </a>
-            </li>
-          {% endif %}
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{% url 'landing' %}">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Forums <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% for forum in forums %}
+                        <li><a href="{% url 'forum_detail' forum.id %}">{{ forum.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} <b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'logout' %}">Log Out</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="active">
+                        <form method="post" class="navbar-form navbar-left" action="/forum/login/">{% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Username" name="username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="Password" name="password">
+                            </div>
+                            <button class="btn btn-default" type="submit">Login</button>
+                        </form>
+                    </li>
+                    <li class="active">
+                        <a href="/forum/signup/">
+                            Sign Up
+                        </a>
+                    </li>
+                {% endif %}
 
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
+            </ul>
+        </div>
     </div>
-    <div class="container">
+</div>
+<div class="container">
     {% if errors %}
         <div class="alert alert-warning">
-          {% for error in errors %}
-          {{ error }}
-          {% endfor %}
+            {% for error in errors %}
+                {{ error }}
+            {% endfor %}
         </div>
     {% endif %}
     {% block errors %}
@@ -77,20 +80,18 @@
     {% endblock %}
     {% block content %}
 
-    {% if forums %}
-        <div class="row">
-            {% for forum in forums %}
-            {% include "forum/forum_widget.html" with forum=forum %}
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>No forums are available.</p>
-    {% endif %}
+        {% if forums %}
+            <div class="row">
+                {% for forum in forums %}
+                    {% include "forum/forum_widget.html" with forum=forum %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No forums are available.</p>
+        {% endif %}
 
     {% endblock %}
-    </div>
-
-
-  </body>
+</div>
+</body>
 </html>
 

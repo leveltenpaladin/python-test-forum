@@ -7,7 +7,8 @@ from django.views.generic import DetailView, View, TemplateView
 from django.views.generic.edit import FormView
 
 from forum.models import Forum, Thread
-from forum.forms import ForumCreationForm, ThreadCreationForm
+from forum.forms import ForumCreationForm, ThreadCreationForm, ReplyCreationForm
+from django.core.urlresolvers import reverse
 
 import logging
 
@@ -51,6 +52,36 @@ class ThreadCreationView(CreateView):
         return context
 
 
+class ReplyCreationView(CreateView):
+    template_name = 'forum/reply_create.html'
+    form_class = ReplyCreationForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(ReplyCreationView, self).form_valid(form)
+
+    def get_initial(self):
+        parent = get_object_or_404(Forum, id=self.kwargs['pk'])
+        return {
+            'parent': parent,
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super(ReplyCreationView, self).get_context_data(**kwargs)
+        parent_id = self.kwargs['pk']
+        parent_forum_id = self.kwargs['parent']
+        if parent_id is None:
+            parent_id = 0
+        context['parent_id'] = parent_id
+        context['parent_forum_id'] = parent_forum_id
+        return context
+
+    def get_success_url(self):
+        parent_id = self.kwargs['pk']
+        parent_forum_id = self.kwargs['parent']
+        return reverse('thread_detail', args=[parent_forum_id, parent_id])
+
+
 class ForumCreationView(CreateView):
     template_name = 'forum/create_forum.html'
     form_class = ForumCreationForm
@@ -92,7 +123,6 @@ class SignUpView(FormView):
 class LogInView(FormView):
     template_name = 'forum/login.html'
     form_class = AuthenticationForm
-    success_url = '/forum/'
 
     def form_valid(self, form):
         form.clean()
@@ -100,6 +130,17 @@ class LogInView(FormView):
             login(self.request, form.get_user())
         return super(LogInView, self).form_valid(form)
 
+    def get_success_url(self):
+        next = self.request.GET.get('next', None)
+        if next is not None:
+            return next
+        else:
+            return reverse('landing')
+
+    def get_context_data(self, **kwargs):
+        context = super(LogInView, self).get_context_data(**kwargs)
+        context['next'] = self.request.GET.get('next', None)
+        return context
 
 class LogOutView(View):
     def get(self, request):

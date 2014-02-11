@@ -10,7 +10,7 @@
         </div>
     {% endfor %}
 {% endif %}
-<form class="form-horizontal" role="form" action="/forum/login/" method="post">
+<form class="form-horizontal" role="form" action="{% url 'login' %}{% if next %}?next={{ next }}{% endif %}" method="post">
     {% csrf_token %}
     {# Include the hidden fields #}
     {% for hidden in form.hidden_fields %}
