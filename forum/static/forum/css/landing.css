@@ -40,7 +40,7 @@ body {
 .thread-detail > .detail-pad,
 .thread-detail > .title-pad,
 .thread-detail > .action-pad{
-    position: absolute;
+    position: relative;
     padding: 5px;
 }
 
@@ -51,7 +51,7 @@ body {
 .reply-detail > .detail-pad,
 .reply-detail > .content-pad,
 .reply-detail > .action-pad{
-    position: absolute;
+    position: relative;
     padding: 5px;
 }
 
