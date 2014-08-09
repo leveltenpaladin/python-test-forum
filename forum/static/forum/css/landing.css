@@ -3,31 +3,15 @@ body {
   padding-top: 70px;
 }
 
-
-.thread-detail-reply div{
-    min-height: 100px;
-}
-
-.thread-detail-reply .thread-detail-reply-user{
-    padding: 5px;
-}
-
-.thread-detail-reply .thread-detail-reply-content{
-    padding: 5px;
-}
-
-.thread-detail-reply .thread-detail-reply-actions{
-    padding-top: 5px;
-}
-
-.thread-detail-title{
-    font-size: 24px;
-}
-
-.thread-detail.user{
-
-}
-
 .glyphicon{
     font-size: 20px;
 }
+
+.thread-heading{
+    min-height: 60px;
+}
+
+.thread-detail-reply{
+    min-height: 100px;
+}
+

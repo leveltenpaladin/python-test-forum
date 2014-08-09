@@ -2,11 +2,16 @@
 
 {% block content %}
 <div class="panel panel-default">
-    <div class="panel-heading" style="overflow: auto;">
+    <div class="panel-heading thread-heading">
         <div class="col-sm-2 col-md-2 thread-detail-user">
-            {{ thread.op.username }}
-            <br>
-            {{ thread.pretty_date }}
+            <div class="detail-pad">
+                <div class="user-pad">
+                    {{ thread.op.username }}
+                </div>
+                <div class="date-pad">
+                    {{ thread.pretty_date }}
+                </div>
+            </div>
         </div>
         <div class="col-sm-9 col-md-9 thread-detail-title">
             <a href="{{ thread.get_absolute_url }}">
@@ -22,31 +27,28 @@
             </a>
         </div>
     </div>
+    {% for reply in replies %}
     <div class="row thread-detail-reply">
-        {% for reply in replies %}
-        <div class="col-sm-2 col-md-2">
-            <div class="thread-detail-reply-user">
+        <div class="col-sm-2 col-md-2 user">
+             <div class="user-pad">
                 {{ reply.user.username }}
-                <br>
-                {{ reply.pretty_date }}
+            </div>
+            <div class="date-pad">
+               {{ reply.pretty_date }}
             </div>
         </div>
-        <div class="col-sm-9 col-md-9">
-            <div class="thread-detail-reply-content">
-                {{ reply.content }}
-            </div>
+        <div class="col-sm-9 col-md-9 content">
+           {{ reply.content }}
         </div>
-        <div class="col-sm-1 col-md-1">
-            <div class="thread-detail-reply-actions">
-                <a href="{% url 'thread_reply' parent.id thread.id%}">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </a>
-                <a href="{% url 'thread_reply' parent.id thread.id%}">
-                    <span class="glyphicon glyphicon-retweet"></span>
-                </a>
-            </div>
+        <div class="col-sm-1 col-md-1 actions">
+            <a href="{% url 'thread_reply' parent.id thread.id%}">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            <a href="{% url 'thread_reply' parent.id thread.id%}">
+                <span class="glyphicon glyphicon-retweet"></span>
+            </a>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 </div>
 {% endblock %}
