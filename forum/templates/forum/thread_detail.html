@@ -1,11 +1,10 @@
 {% extends "forum/index.html" %}
 
 {% block content %}
-<div class="panel panel-default">
-    <div class="panel-heading thread-heading">
-        <div class="col-sm-2 col-md-2 thread-detail-user">
+    <div class="row thread-heading">
+        <div class="col-sm-2 col-md-2 thread-detail user">
             <div class="detail-pad">
-                <div class="user-pad">
+                <div class="name-pad">
                     {{ thread.op.username }}
                 </div>
                 <div class="date-pad">
@@ -13,42 +12,51 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-9 col-md-9 thread-detail-title">
-            <a href="{{ thread.get_absolute_url }}">
-                {{ thread.title }}
-            </a>
+        <div class="col-sm-9 col-md-9 thread-detail title">
+            <div class="title-pad">
+                <a href="{{ thread.get_absolute_url }}">
+                    <h2>{{ thread.title }}</h2>
+                </a>
+            </div>
         </div>
-        <div class="col-sm-1 col-md-1">
-            <a href="{% url 'thread_reply' parent.id thread.id%}">
-                <span class="glyphicon glyphicon-pencil"></span>
-            </a>
-            <a href="{% url 'thread_reply' parent.id thread.id%}">
-                <span class="glyphicon glyphicon-share-alt"></span>
-            </a>
+        <div class="col-sm-1 col-md-1 thread-detail actions">
+            <div class="action-pad">
+                <a href="{% url 'thread_reply' parent.id thread.id%}">
+                    <span class="glyphicon glyphicon-pencil">Reply</span>
+                </a>
+                <a href="{% url 'thread_reply' parent.id thread.id%}">
+                    <span class="glyphicon glyphicon-share-alt">Quote</span>
+                </a>
+            </div>
         </div>
     </div>
     {% for reply in replies %}
-    <div class="row thread-detail-reply">
-        <div class="col-sm-2 col-md-2 user">
-             <div class="user-pad">
-                {{ reply.user.username }}
-            </div>
-            <div class="date-pad">
-               {{ reply.pretty_date }}
+    <div class="row thread-reply">
+        <div class="col-sm-2 col-md-2 reply-detail user">
+            <div class="detail-pad">
+                <div class="name-pad">
+                    {{ reply.user.username }}
+                </div>
+                <div class="date-pad">
+                   {{ reply.pretty_date }}
+                </div>
             </div>
         </div>
-        <div class="col-sm-9 col-md-9 content">
-           {{ reply.content }}
+        <div class="col-sm-9 col-md-9 reply-detail content">
+            <div class="content-pad">
+               {{ reply.content }}
+            </div>
         </div>
-        <div class="col-sm-1 col-md-1 actions">
-            <a href="{% url 'thread_reply' parent.id thread.id%}">
-                <span class="glyphicon glyphicon-pencil"></span>
-            </a>
-            <a href="{% url 'thread_reply' parent.id thread.id%}">
-                <span class="glyphicon glyphicon-retweet"></span>
-            </a>
+        <div class="col-sm-1 col-md-1 reply-detail actions">
+            <div class="action-pad">
+                <a href="{% url 'thread_reply' parent.id thread.id%}">
+                    <span class="glyphicon glyphicon-pencil">Reply</span>
+                </a>
+                <a href="{% url 'thread_reply' parent.id thread.id%}">
+                    <span class="glyphicon glyphicon-retweet">Quote</span>
+                </a>
+            </div>
         </div>
     </div>
     {% endfor %}
-</div>
 {% endblock %}

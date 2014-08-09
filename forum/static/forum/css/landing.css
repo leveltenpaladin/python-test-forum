@@ -1,17 +1,76 @@
 body {
-  min-height: 2000px;
   padding-top: 70px;
 }
 
-.glyphicon{
-    font-size: 20px;
+
+.thread-heading{
+    min-height: 63px;
 }
 
 .thread-heading{
-    min-height: 60px;
+    border: 1px solid #ddd;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    background-color:#f5f5f5;
 }
 
-.thread-detail-reply{
+.thread-reply{
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.thread-reply:last-of-type{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+}
+
+.thread-heading .glyphicon:before,
+.thread-reply .glyphicon:before{
+    position: absolute;
+    left:-16px;
+    top:2px;
+    width: 18px;
+}
+
+.thread-detail > .detail-pad,
+.thread-detail > .title-pad,
+.thread-detail > .action-pad{
+    position: absolute;
+    padding: 5px;
+}
+
+.thread-heading .title h2{
+    margin-top:10px;
+}
+
+.reply-detail > .detail-pad,
+.reply-detail > .content-pad,
+.reply-detail > .action-pad{
+    position: absolute;
+    padding: 5px;
+}
+
+.action-pad > a {
+    padding: 0 0 18px 0;
+}
+
+.reply-detail .date-pad,
+.thread-detail .date-pad{
+    font-size: 12px;
+}
+
+.reply-detail .name-pad,
+.thread-detail .name-pad{
+    font-size: 16px;
+}
+
+.thread-reply{
     min-height: 100px;
 }
+
 
