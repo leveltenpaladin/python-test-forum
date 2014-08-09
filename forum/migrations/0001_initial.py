@@ -8,48 +8,41 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ForumUser'
-        db.create_table(u'forum_forumuser', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-        ))
-        db.send_create_signal(u'forum', ['ForumUser'])
-
         # Adding model 'Forum'
         db.create_table(u'forum_forum', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['forum.Forum'], null=True, on_delete=models.SET_NULL, blank=True)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='child_forums', null=True, on_delete=models.SET_NULL, to=orm['forum.Forum'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now, blank=True)),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_forums', to=orm['auth.User'])),
+            ('status', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
         db.send_create_signal(u'forum', ['Forum'])
 
         # Adding model 'Thread'
         db.create_table(u'forum_thread', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('parent_forum', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['forum.Forum'])),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now, blank=True)),
+            ('parent_forum', self.gf('django.db.models.fields.related.ForeignKey')(related_name='threads', to=orm['forum.Forum'])),
+            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('op', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('status', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
         db.send_create_signal(u'forum', ['Thread'])
 
         # Adding model 'Reply'
         db.create_table(u'forum_reply', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['forum.Thread'])),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now, blank=True)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='replies', to=orm['forum.Thread'])),
+            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('content', self.gf('django.db.models.fields.TextField')()),
+            ('status', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
         db.send_create_signal(u'forum', ['Reply'])
 
 
     def backwards(self, orm):
-        # Deleting model 'ForumUser'
-        db.delete_table(u'forum_forumuser')
-
         # Deleting model 'Forum'
         db.delete_table(u'forum_forum')
 
@@ -99,31 +92,29 @@ class Migration(SchemaMigration):
         },
         u'forum.forum': {
             'Meta': {'object_name': 'Forum'},
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'blank': 'True'}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
+            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_forums'", 'to': u"orm['auth.User']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['forum.Forum']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'})
-        },
-        u'forum.forumuser': {
-            'Meta': {'object_name': 'ForumUser'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'})
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'child_forums'", 'null': 'True', 'on_delete': 'models.SET_NULL', 'to': u"orm['forum.Forum']"}),
+            'status': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
         u'forum.reply': {
             'Meta': {'object_name': 'Reply'},
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'blank': 'True'}),
+            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['forum.Thread']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'replies'", 'to': u"orm['forum.Thread']"}),
+            'status': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'forum.thread': {
             'Meta': {'object_name': 'Thread'},
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'blank': 'True'}),
+            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'op': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
-            'parent_forum': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['forum.Forum']"}),
+            'parent_forum': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'threads'", 'to': u"orm['forum.Forum']"}),
+            'status': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         }
     }
