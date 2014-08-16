@@ -81,11 +81,9 @@
     {% block content %}
 
         {% if forums %}
-            <div class="row">
                 {% for forum in forums %}
                     {% include "forum/forum_widget.html" with forum=forum %}
                 {% endfor %}
-            </div>
         {% else %}
             <p>No forums are available.</p>
         {% endif %}

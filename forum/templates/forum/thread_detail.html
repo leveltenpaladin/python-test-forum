@@ -1,6 +1,23 @@
 {% extends "forum/index.html" %}
 
 {% block content %}
+     <div class="row forum-header compact">
+         <div class="col-md-10 title">
+             <a href="{{ thread.parent_forum.get_absolute_url }}">
+                 <h2>{{ thread.parent_forum.name }}</h2>
+             </a>
+         </div>
+         <div class="col-sm-2 col-md-2 actions">
+             <div class="action-pad">
+                 <a href="{% url 'new_forum' thread.parent_forum.id %}">
+                     <span class="glyphicon glyphicon-plus">New Subforum</span>
+                 </a>
+                 <a href="{% url 'new_thread' thread.parent_forum.id %}">
+                     <span class="glyphicon glyphicon-pencil">New Thread</span>
+                 </a>
+             </div>
+         </div>
+    </div>
     <div class="row thread-heading">
         <div class="col-sm-2 col-md-2 thread-detail user">
             <div class="detail-pad">

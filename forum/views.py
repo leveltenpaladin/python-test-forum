@@ -142,6 +142,7 @@ class LogInView(FormView):
         context['next'] = self.request.GET.get('next', None)
         return context
 
+
 class LogOutView(View):
     def get(self, request):
         logout(request)

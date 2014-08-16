@@ -1,43 +1,66 @@
-<div>
-    {% if forum  %}
-        <div class="panel panel-default">
-            <div class="panel-heading" style="overflow: auto;">
-                <div class="col-md-11">
+{% if forum %}
+    <div class="row forum-widget">
+        <div class="col-md-12">
+            <div class="row forum-header">
+                <div class="col-md-10 title">
                     <a href="{{ forum.get_absolute_url }}">
-                        <h3 class="panel-title">{{ forum.name }}</h3>
+                        <h2>{{ forum.name }}</h2>
                     </a>
                 </div>
-                <div class="col-md-1">
-                    <a href="{% url 'new_forum' forum.id%}">
-                        <span class="glyphicon glyphicon-plus"></span>
-                    </a>
-                    <a href="{% url 'new_thread' forum.id%}">
-                        <span class="glyphicon glyphicon-pencil"></span>
+                <div class="col-sm-2 col-md-2 actions">
+                    <div class="action-pad">
+                        <a href="{% url 'new_forum' forum.id %}">
+                            <span class="glyphicon glyphicon-plus">New Subforum</span>
+                        </a>
+                        <a href="{% url 'new_thread' forum.id %}">
+                            <span class="glyphicon glyphicon-pencil">New Thread</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for sub_forum in forum.get_sub_forums %}
+            <div class="col-md-12 sub-forum">
+                <div class="pad">
+                    <a href="{{ sub_forum.get_absolute_url }}">
+                        <h3 class="panel-title">{{ sub_forum.name }}</h3>
                     </a>
                 </div>
             </div>
-            <div class="panel-body">
-            {% for sub_forum in forum.get_sub_forums%}
-                <div class="well well-sm" style="overflow: auto;">
-                    <div class="col-md-11">
-                        <a href="{{ sub_forum.get_absolute_url }}">
-                            <h3 class="panel-title">{{ sub_forum.name }}</h3>
-                        </a>
-                    </div>
-                    <div class="col-md-1">
-                        <a href="{% url 'new_forum' sub_forum.id%}">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </a>
-                        <a href="{% url 'new_thread' sub_forum.id%}">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
-                    </div>
+        {% endfor %}
+
+        {% if forum.get_threads %}
+            <div class="col-md-12">
+                {% for thread in forum.get_threads %}
+                    {% include "forum/thread_widget.html" with thread=thread user=thread.op %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="col-md-12 no-thread">
+                <div class="pad">
+                    No Threads Found
                 </div>
-            {% endfor %}
-            {% for thread in forum.get_threads %}
-                {% include "forum/thread_widget.html" with thread=thread user=thread.op %}
-            {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    {% if forum.parent %}
+        <div class="row forum-header compact">
+            <div class="col-md-10 title">
+                <a href="{{ forum.parent.get_absolute_url }}">
+                    <h2>{{ forum.parent.name }}</h2>
+                </a>
+            </div>
+            <div class="col-sm-2 col-md-2 actions">
+                <div class="action-pad">
+                    <a href="{% url 'new_forum' forum.parent.id %}">
+                        <span class="glyphicon glyphicon-plus">New Subforum</span>
+                    </a>
+                    <a href="{% url 'new_thread' forum.parent.id %}">
+                        <span class="glyphicon glyphicon-pencil">New Thread</span>
+                    </a>
+                </div>
             </div>
         </div>
     {% endif %}
-</div>
+{% endif %}

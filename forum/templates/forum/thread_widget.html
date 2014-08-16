@@ -1,17 +1,28 @@
-<div class="panel panel-default">
-    <div class="row">
-      <div class="col-sm-2 col-md-2">
-        {{ thread.pretty_date }}
-      </div>
-      <div class="col-sm-8 col-md-8">
-          <a href="{{ thread.get_absolute_url }}">
-            {{ thread.title }}
-          </a>
-      </div>
-      <div class="col-sm-2 col-md-2">
-        {{ user.username }}
-      </div>
+{% if thread and user %}
+    <div class="row thread-widget">
+        <div class="col-sm-2 col-md-2 thread-detail user">
+            <div class="detail-pad">
+                <div class="name-pad">
+                    {{ user.username }}
+                </div>
+                <div class="date-pad">
+                    {{ thread.pretty_date }}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 col-md-9 thread-detail title" onclick="window.open('{{ thread.get_absolute_url }}', '_self')">
+            <div class="title-pad">
+                {{ thread.title }}
+            </div>
+        </div>
+        <div class="col-sm-1 col-md-1 thread-detail actions">
+            <div class="action-pad">
+                <a href="{% url 'thread_reply' thread.parent_forum.id thread.id %}">
+                    <span class="glyphicon glyphicon-pencil">Reply</span>
+                </a>
+            </div>
+        </div>
     </div>
-</div>
+{% endif %}
 
 
